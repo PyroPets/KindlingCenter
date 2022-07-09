@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>KindlingCenter</title>
+    <meta name="description" content="A simple smart contract that allows pyros to be played with in bulk." />
+    <meta name="author" content="SeqSEE" />
+
+    <meta property="og:title" content="A simple smart contract that allows pyros to be played with in bulk." />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="A simple smart contract that allows pyros to be played with in bulk." />
+
+    <link rel="icon" href="/favicon.png" />
+
+    <meta charset="utf-8" />
+    <title>Semantic UI CDN</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"
+        integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <style>
+        h1,
+        h2,
+        h3,
+        h4 {
+            color: whitesmoke !important;
+            font-family: 'VT323' !important;
+        }
+
+        label {
+            font-family: 'VT323' !important;
+            font-size: 125% !important;
+        }
+
+        .ui.labeled.input>.label {
+            font-size: 105% !important;
+        }
+
+        body {
+            font-family: 'VT323' !important;
+            font-size: 175% !important;
+            image-rendering: optimizeSpeed;
+            /* STOP SMOOTHING, GIVE ME SPEED  */
+            image-rendering: -moz-crisp-edges;
+            /* Firefox                        */
+            image-rendering: -o-crisp-edges;
+            /* Opera                          */
+            image-rendering: -webkit-optimize-contrast;
+            /* Chrome (and eventually Safari) */
+            image-rendering: pixelated;
+            /* Chrome */
+            image-rendering: optimize-contrast;
+            /* CSS3 Proposed                  */
+            -ms-interpolation-mode: nearest-neighbor;
+            /* IE8+   */
+            color: aliceblue;
+            background: rgb(123, 104, 238);
+            background: radial-gradient(circle,
+                    rgba(123, 104, 238, 1) 0%,
+                    rgba(2, 0, 36, 1) 93%);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+        }
+
+        .ui.button {
+            font-family: 'VT323' !important;
+            font-size: 105% !important;
+        }
+
+        .footer {
+            z-index: 10;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            opacity: 0.88;
+            background: rgb(2, 0, 36);
+            background: linear-gradient(0deg,
+                    rgba(2, 0, 36, 1) 39%,
+                    rgba(2, 0, 36, 0.7175245098039216) 84%,
+                    rgba(123, 104, 238, 0) 100%);
+        }
+
+        .footer .ui.grid {
+            padding: 22px 0px 32px 0px;
+        }
+
+        .footer .ui.grid>.row {
+            margin: 0px 10px;
+            padding: 0px;
+        }
+
+        .footer .ui.divided.list>.item {
+            color: aliceblue;
+            font-size: 16px;
+            margin: 0px 10px;
+        }
+
+        .footer .ui.divided.list>.item:hover {
+            color: rgb(202, 174, 255);
+        }
+
+        .footer .ui.horizontal.list>.item>i.icon {
+            color: aliceblue;
+        }
+
+        .footer .ui.list>a.item:hover .icon {
+            color: rgb(202, 174, 255);
+        }
+    </style>
+</head>
+
+<body>
+    <div style="height: 100%" class="ui grid middle aligned padded">
+        <div class="row stretched">
+            <div class="column stretched">
+                <div id="wrapper" class="ui grid stackable centered padded very">
+                    <div class="two wide column stretched middle aligned">
+
+                        <h1 class="ui header icon">
+                            <div
+                                style="display:inline-block;max-width:100%;overflow:hidden;position:relative;box-sizing:border-box;margin:0">
+                                <div style="box-sizing:border-box;display:block;max-width:100%"><img
+                                        style="min-width:100%;max-width:100%;display:block;margin:0;border:none;padding:0"
+                                        alt="" aria-hidden="true"
+                                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjEwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2ZXJzaW9uPSIxLjEiLz4=">
+                                </div><img
+                                    src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAy5JREFUeF7tmttxGzEMRbkVJJ8pwfWkA5eQSlKCO0g9KsGfdgXrwWqxA0F8LPEipVg/nrGt0d6DewGQ9pKCX+vftC5/0hL8scWPC38QAABPMwuEYQBmgRAOAISjC9CXI90wDsDPXf7H9esoCOMBgPqP/xXAj5TS5xXAKBeEO+DIP0QAAewuGAFhDADMPwCAF7hgEIQ5ADAIkQ0xFMCd/el+NsgF8QC4/QsQolwQBuCm+iAa8z/YBSEATolHECQKES6IA4DWL1U/AyBiLLoDuKt+C0DwRHAFIBL/LADE4p8BgEo87QUBhySXCGwAzjY9Ogb5SAw4JJkD6Bp5JfGBMTAFYCb+EQGYin80AObiGwAsr9ZNInDT9HI7fi3rtSa43xHwlXgqAK7VrwCwWpNVDjAR/yul9M5sULkbsL5S1wPQzHsQD++/EAAovlZ9cqWuPTGKAairj+JBqAKANgoiAOpVl4rvAJD9XOW6LAegsf4Ly/wJB2QdZ/A3hXgAvPrcAZkdoBg3g9ujbgDq7PPq783uZhKwKbD5Jec4g5tkGQCp/XPVxzTQGFAX8EWJL1pKF+gA9G59ueqjQDj6lvYB/J3GTbJkJHYBcLE/rXAOQmuNjnSAeuevOaDmhDMQhJcn/Q6o/WWn9qC1/PP38X5wBkBhc2y9NQ7AmepLXaCIwZwAcqOxVsqnBJBbkEoQpgUAtsc890SgNwpTAuBHXQmAs1FQnAn6ewCupa0lCAXjbJcCaEVBUf3tKN0aE/znp3YBPvK0EGoL0pQASgceeoboJV/aDYYAoKezXBQ0di+ByQEYcRqE56vGoGfj63FBA4DkICTqAQeAUjP0qH5uGhhUXwyg6AKv6qNTcldnI+4EvwHsFTl6ATbCaAcoq6+KALpyfUvr8T9/UQD2/C+v/XsM77vdi9DdYgQA4AUu8ARAl6GZAGz9IMIF2AANxZtE4IjCv90J8A2PUUgAWFgfn1sdARqJFSFYAyD2X37rc0+f2RTAFgcPCHv1rcWbRsDNCY7i3QAcTrCIwiUlj8q79IC7EQlx0EBwFu/qgJvpIIEQID4EgCgOQeLDAHRBCBQPz/UFfLaBUDpcM5QAAAAASUVORK5CYII="
+                                    decoding="async" data-nimg="intrinsic"
+                                    style="position:absolute;top:0;left:0;bottom:0;right:0;box-sizing:border-box;padding:0;border:none;margin:auto;display:block;width:0;height:0;min-width:100%;max-width:100%;min-height:100%;max-height:100%"><noscript><img
+                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAAAAXNSR0IArs4c6QAAAy5JREFUeF7tmttxGzEMRbkVJJ8pwfWkA5eQSlKCO0g9KsGfdgXrwWqxA0F8LPEipVg/nrGt0d6DewGQ9pKCX+vftC5/0hL8scWPC38QAABPMwuEYQBmgRAOAISjC9CXI90wDsDPXf7H9esoCOMBgPqP/xXAj5TS5xXAKBeEO+DIP0QAAewuGAFhDADMPwCAF7hgEIQ5ADAIkQ0xFMCd/el+NsgF8QC4/QsQolwQBuCm+iAa8z/YBSEATolHECQKES6IA4DWL1U/AyBiLLoDuKt+C0DwRHAFIBL/LADE4p8BgEo87QUBhySXCGwAzjY9Ogb5SAw4JJkD6Bp5JfGBMTAFYCb+EQGYin80AObiGwAsr9ZNInDT9HI7fi3rtSa43xHwlXgqAK7VrwCwWpNVDjAR/yul9M5sULkbsL5S1wPQzHsQD++/EAAovlZ9cqWuPTGKAairj+JBqAKANgoiAOpVl4rvAJD9XOW6LAegsf4Ly/wJB2QdZ/A3hXgAvPrcAZkdoBg3g9ujbgDq7PPq783uZhKwKbD5Jec4g5tkGQCp/XPVxzTQGFAX8EWJL1pKF+gA9G59ueqjQDj6lvYB/J3GTbJkJHYBcLE/rXAOQmuNjnSAeuevOaDmhDMQhJcn/Q6o/WWn9qC1/PP38X5wBkBhc2y9NQ7AmepLXaCIwZwAcqOxVsqnBJBbkEoQpgUAtsc890SgNwpTAuBHXQmAs1FQnAn6ewCupa0lCAXjbJcCaEVBUf3tKN0aE/znp3YBPvK0EGoL0pQASgceeoboJV/aDYYAoKezXBQ0di+ByQEYcRqE56vGoGfj63FBA4DkICTqAQeAUjP0qH5uGhhUXwyg6AKv6qNTcldnI+4EvwHsFTl6ATbCaAcoq6+KALpyfUvr8T9/UQD2/C+v/XsM77vdi9DdYgQA4AUu8ARAl6GZAGz9IMIF2AANxZtE4IjCv90J8A2PUUgAWFgfn1sdARqJFSFYAyD2X37rc0+f2RTAFgcPCHv1rcWbRsDNCY7i3QAcTrCIwiUlj8q79IC7EQlx0EBwFu/qgJvpIIEQID4EgCgOQeLDAHRBCBQPz/UFfLaBUDpcM5QAAAAASUVORK5CYII="
+                                        decoding="async" data-nimg="intrinsic"
+                                        style="position:absolute;top:0;left:0;bottom:0;right:0;box-sizing:border-box;padding:0;border:none;margin:auto;display:block;width:0;height:0;min-width:100%;max-width:100%;min-height:100%;max-height:100%"
+                                        loading="lazy" /></noscript>
+                            </div>KindlingCenter
+                        </h1>
+                    </div>
+                    <div class="seven wide column stretched middle aligned" id="contract"></div>
+
+
+                    <div class="two wide column stretched">
+                        <a href="https://github.com/PyroPets/KindlingCenter" target="_blank">
+                            <div class="ui raised segment fluid center aligned gray inverted" style="opacity: 0.7;">
+                                <h3 class="ui header icon">
+                                    <i class="code icon"></i>
+                                    <h4 class="sub header">Source</h4>
+                                </h3>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="two wide column stretched">
+                        <a href="/abi/KindlingCenter.json" target="_blank">
+                            <div class="ui raised segment fluid center aligned gray inverted" style="opacity: 0.7;">
+                                <h3 class="ui header icon">
+                                    <i class="settings icon"></i>
+                                    <h4 class="sub header">ABI</h4>
+                                </h3>
+                            </div>
+                        </a>
+                    </div>
+
+
+                    <div class="sixteen wide column middle aligned">
+                        <div class="ui hidden message error compact" id="errMsg"></div>
+                    </div>
+                    <div class="sixteen wide column stretched">
+                        <div class="ui grid stackable centered" id="functions"></div>
+                    </div>
+
+                    <div class="stretched row">
+                        <div class="ui center aligned grid footer">
+                            <div style="display:none" class="stretched row">
+                                <div class="ui grid">
+                                    <div class="row">
+                                        <div class="column"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div style="padding:0px; margin-bottom: 7px;" class="stretched row">
+                                <div role="list" class="ui divided horizontal list"
+                                    style="padding-top:10px;height:37px">
+                                    <div role="listitem" class="item">
+                                        <div style="padding:0px;height:fit-content"
+                                            class="ui stretched center aligned grid">
+                                            <div class="stretched row">
+                                                <div class="stretched column">
+                                                    <div role="list" class="ui divided horizontal list"><a
+                                                            role="listitem" class="item" href="https://pyropets.org"
+                                                            target="_blank"><span>©
+                                                                <!-- -->2022
+                                                                <!-- -->PyroPets
+                                                            </span></a></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div><a role="listitem" class="item" href="https://metrixcoin.com"
+                                        target="_blank">⚡Powered by
+                                        MetrixCoin</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- content here... -->
+    <script src="/js/bs58.bundle.js"></script>
+    <script type="module">
+        import { ethers } from "/js/ethers-5.2.esm.min.js";
+        import contracts from "/contracts/deployed.js";
+        import abi from "/abi/KindlingCenter.js";
+        import pp from "/abi/PyroCore.js";
+
+        const getDeployedContract = (network, contract) => {
+            return contracts[network][contract];
+        }
+
+        let loggedIn = false;
+        let loaded = false;
+        let hexAddress = "";
+        let network = "";
+
+        const b58Prefix = {
+            MainNet: 0x32,
+            TestNet: 0x6e,
+        };
+
+        const toHexAddress = (address) => {
+            const bytes = bs58.decode(address);
+            const hex = bytes.toString("hex");
+            return hex.substring(2, hex.length - 8);
+        };
+
+        const fromHexAddress = (network, hex) => {
+            if (hex.length !== 40) {
+                return undefined;
+            }
+            let bytes = [];
+            for (let c = 0; c < hex.length; c += 2)
+                bytes.push(parseInt(hex.substr(c, 2), 16));
+            const hash = ethers.utils.arrayify(
+                ethers.utils.sha256(
+                    ethers.utils.sha256([b58Prefix[network], ...bytes])
+                )
+            );
+            const checksum = [hash[0], hash[1], hash[2], hash[3]];
+            return bs58.encode([b58Prefix[network], ...bytes, ...checksum]);
+        };
+
+        function handleAccountChanged(data) {
+            const { account } = data;
+            if (account && account.loggedIn) {
+                loggedIn = true;
+                const { address } = account;
+                hexAddress = toHexAddress(address);
+                document.getElementById("contract").innerHTML = "";
+                document.getElementById("functions").innerHTML = "";
+                document.getElementById("errMsg").classList.add("hidden");
+                network = account.network;
+                getContract();
+                setupFunctions();
+                if (!loaded) {
+                    loaded = true;
+                }
+            } else {
+                loggedIn = false;
+                loaded = false;
+                hexAddress = "";
+                document.getElementById("contract").innerHTML = "";
+                document.getElementById("functions").innerHTML = "";
+                document.getElementById(
+                    "errMsg"
+                ).innerHTML = `<div class="header">Error</div><p>Not logged in. Please log in to MetriMask to continue.</p>`;
+                document.getElementById("errMsg").classList.remove("hidden");
+            }
+        }
+
+        // Handle incoming messages
+        function handleMessage(message) {
+            if (message.data && message.data.target) {
+                if (
+                    message.data.target.startsWith("metrimask") &&
+                    message.data.message
+                ) {
+                    switch (message.data.message.type) {
+                        case "GET_INPAGE_METRIMASK_ACCOUNT_VALUES":
+                            console.log("Updating MetriMask context");
+                            break;
+                        case "METRIMASK_ACCOUNT_CHANGED":
+                            handleAccountChanged(message.data.message.payload);
+                            break;
+                        case "METRIMASK_INSTALLED_OR_UPDATED":
+                            window.location.reload();
+                            break;
+                        case "SIGN_TX_URL_RESOLVED":
+                            break;
+                        case "RPC_REQUEST":
+                            break;
+                        case "RPC_RESPONSE":
+                            break;
+                        case "RPC_SEND_TO_CONTRACT":
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+        }
+
+        window.addEventListener("message", handleMessage, false);
+        console.log("Connecting MetriMask");
+        window.postMessage({ message: { type: "CONNECT_METRIMASK" } }, "*");
+
+        const iface = new ethers.utils.Interface(abi);
+
+        const functionSignature = (functionName) => {
+            const fragment = iface.getFunction(functionName);
+            return iface.getSighash(fragment).replace("0x", "");
+        };
+
+        const setupFunctions = async () => {
+            const loader = document.createElement("div");
+            loader.className = "ui active loader";
+            document.getElementById("functions").appendChild(loader);
+            let colCount = 0;
+            for (const key of Object.keys(iface.functions)) {
+                const sig = functionSignature(key);
+                const segment = document.createElement("div");
+                let color = "violet";
+                switch (iface.functions[key].stateMutability) {
+                    case "payable":
+                        color = "pink";
+                        break;
+                    case "nonpayable":
+                        color = "purple";
+                        break;
+                    default:
+                        break;
+                }
+                segment.className = `ui segment ${color}`;
+                segment.style.opacity = "0.88";
+                const column = document.createElement("div");
+                column.className = "eight wide column stretched";
+                const form = document.createElement("form");
+                form.className = "ui form";
+                form.id = sig;
+                form.onsubmit = (event) => {
+                    document.getElementById(
+                        `${sig}Msg`
+                    ).innerHTML = ``;
+                    document
+                        .getElementById(`${sig}Msg`)
+                        .classList.remove("negative");
+                    document
+                        .getElementById(`${sig}Msg`)
+                        .classList.add("hidden");
+                    const tmp = new FormData(document.getElementById(sig));
+                    const values = [];
+                    let i = 0;
+                    try {
+                        for (const [k, v] of tmp.entries()) {
+                            if (v) values.push(v);
+                            else values.push("");
+                            if (i <= iface.functions[key].inputs.length - 1) {
+                                const x = iface.functions[key].inputs[i++];
+                                const encoded = ethers.utils.defaultAbiCoder.encode(
+                                    [x.type],
+                                    [v ? v : ""]
+                                );
+                            }
+                        }
+
+                        const encoded = iface.functions[key].inputs.length > 0 ? iface.encodeFunctionData(key, values) : iface.encodeFunctionData(key, []);
+                        let getResponse;
+                        if (
+                            iface.functions[key].stateMutability !== "nonpayable" &&
+                            iface.functions[key].stateMutability !== "payable"
+                        ) {
+                            getResponse = async () => {
+                                const call = await window.metrimask.rpcProvider.rawCall(
+                                    "callcontract",
+                                    [getDeployedContract(network, 'KindlingCenter'), encoded.replace("0x", "")]
+                                );
+                                const result = call.executionResult;
+                                let decoded;
+                                try {
+                                    decoded = iface.decodeFunctionResult(
+                                        key,
+                                        `0x${result.output}`
+                                    );
+                                } catch (e) {
+                                    decoded = [result.excepted];
+                                }
+
+
+
+                                decoded = decoded.map((data) => {
+                                    return `${data}`.startsWith("0x")
+                                        ? `${data}`.substring(2)
+                                        : `${data}`;
+                                });
+                                const msg =
+                                    decoded && decoded.join(" ").length > 0
+                                        ? decoded.join(" ")
+                                        : "No Response";
+                                document.getElementById(
+                                    `${sig}Msg`
+                                ).innerHTML = `<div class="header">Response</div><p>${msg}</p>`;
+                                document
+                                    .getElementById(`${sig}Msg`)
+                                    .classList.remove("hidden");
+                            };
+                        } else {
+                            if (iface.functions[key].stateMutability !== "payable") {
+                                tmp.append(`${key}value`, 0);
+                            }
+                            getResponse = async () => {
+                                const call = await window.metrimask.rpcProvider.rawCall(
+                                    "sendtocontract",
+                                    [
+                                        getDeployedContract(network, 'KindlingCenter'),
+                                        encoded.replace("0x", ""),
+                                        tmp.get(`${key}value`),
+                                        250000,
+                                        5000,
+                                    ]
+                                )
+
+                                const response = JSON.parse(
+                                    JSON.stringify(
+                                        call
+                                    )
+                                ); //.executionResult.output;
+                                console.log(JSON.stringify(response));
+                                const msg =
+                                    response && JSON.stringify(response).length > 0
+                                        ? JSON.stringify(response)
+                                        : "No Response";
+                                document
+                                    .getElementById(`${sig}Msg`)
+                                    .classList.remove("negative");
+                                document.getElementById(
+                                    `${sig}Msg`
+                                ).innerHTML = `<div class="header">Response</div><p>${msg}</p>`;
+                                document
+                                    .getElementById(`${sig}Msg`)
+                                    .classList.remove("hidden");
+                            };
+                        }
+                        getResponse();
+                    } catch (e) {
+                        const msg = e.message ? e.message : "An error occurred";
+                        document
+                            .getElementById(`${sig}Msg`)
+                            .classList.add("negative");
+                        document.getElementById(
+                            `${sig}Msg`
+                        ).innerHTML = `<div class="header">Error</div><p>${msg}</p>`;
+                        document
+                            .getElementById(`${sig}Msg`)
+                            .classList.remove("hidden");
+                    }
+                    return false;
+                };
+
+                const functionTitle = document.createElement("div");
+                functionTitle.className = "field";
+                const label = document.createElement("label");
+                label.innerHTML = key;
+                functionTitle.appendChild(label);
+                form.appendChild(functionTitle);
+                const msg = document.createElement("div");
+                msg.className = "ui hidden message";
+                msg.id = `${sig}Msg`;
+                msg.style['word-break'] = 'break-all';
+                form.appendChild(msg);
+                for (const finput of iface.functions[key].inputs) {
+                    const field = document.createElement("div");
+                    field.className = "field";
+                    const input = document.createElement("div");
+                    input.className = "ui labeled input";
+                    input.innerHTML = `<div class="ui label ${color} inverted">${finput.type}:${finput.name}</div><input type="text" name="${finput.name}" />`;
+                    field.appendChild(input);
+                    form.appendChild(field);
+                }
+                if (iface.functions[key].stateMutability === "payable") {
+                    const field = document.createElement("div");
+                    field.className = "field";
+                    const input = document.createElement("div");
+                    input.className = "ui labeled input";
+                    input.innerHTML = `<div class="ui label ${color} inverted">Value</div><input type="number" name="${key}value" value="0.00000000" />`;
+                    field.appendChild(input);
+                    form.appendChild(field);
+                }
+                const submit = document.createElement("button");
+                submit.className = `ui button ${color}`;
+                submit.innerHTML = "Call";
+                form.appendChild(submit);
+                segment.appendChild(form);
+                column.appendChild(segment);
+                document.getElementById("functions").appendChild(column);
+                colCount++;
+            }
+            if (colCount % 2 !== 0) {
+                for (let i = 0; i < colCount % 2; i++) {
+                    const column = document.createElement("div");
+                    column.className = "eight wide column stretched";
+                    document.getElementById("functions").appendChild(column);
+                }
+            }
+            document.getElementById("functions").removeChild(loader);
+        };
+
+        const getContract = async () => {
+            document.getElementById(
+                "contract"
+            ).innerHTML = `<div class="ui active loader"></div>`;
+
+            try {
+                const contractAddress = getDeployedContract(network, 'KindlingCenter');
+                const getApproved = async () => {
+                    const ppiface = new ethers.utils.Interface(pp);
+                    const encoded = ppiface.encodeFunctionData('isApprovedForAll(address,address)', [`0x${hexAddress}`, `0x${contractAddress}`])
+                    const call = await window.metrimask.rpcProvider.rawCall(
+                        "callcontract",
+                        [getDeployedContract(network, 'PyroCore'), encoded.replace("0x", "")]
+                    );
+                    const result = call.executionResult;
+                    let decoded;
+                    try {
+                        decoded = ppiface.decodeFunctionResult(
+                            'isApprovedForAll(address,address)',
+                            `0x${result.output}`
+                        );
+                    } catch (e) {
+                        decoded = [result.excepted];
+                    }
+                    if (decoded.toString() !== 'true') {
+                        throw new Error(`KindlingCenter is not approved!\nApprove the contract for your pyros.`);
+                    }
+                }
+                const approved = await getApproved();
+
+                if (contractAddress === ethers.constants.AddressZero.replace('0x', '')) {
+                    throw new Error(`Contract address not set for ${network}`);
+                }
+                let contractDetails = JSON.parse(
+                    JSON.stringify(
+                        await (
+                            await fetch(
+                                `https://${network === 'TestNet' ? 'testnet-' : ''}explorer.metrixcoin.com/api/contract/${contractAddress}`
+                            )
+                        ).json()
+                    )
+                );
+
+
+                document.getElementById(
+                    "contract"
+                ).innerHTML = `<h3>Contract Address<a href="https://${network === 'TestNet' ? 'testnet-' : ''}explorer.metrixcoin.com/contract/${contractAddress}" target="_blank"><h4>${getDeployedContract(network, 'KindlingCenter')}</h4></a></h3>`;
+
+
+            } catch (e) {
+                document.getElementById(
+                    "errMsg"
+                ).innerHTML = `<div class="header">Error</div><p>${e.message
+                    ? e.message
+                    : "Not logged in. Please log in to MetriMask to continue."
+                }</p>`;
+                document.getElementById("errMsg").classList.remove("hidden");
+            }
+        };
+
+        getContract();
+
+
+    </script>
+</body>
+
+</html>
