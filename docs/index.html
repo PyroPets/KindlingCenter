@@ -211,12 +211,12 @@
     </div>
 
     <!-- content here... -->
-    <script src="/js/bs58.bundle.js"></script>
+    <script src="js/bs58.bundle.js"></script>
     <script type="module">
-        import { ethers } from "/js/ethers-5.2.esm.min.js";
-        import contracts from "/contracts/deployed.js";
-        import abi from "/abi/KindlingCenter.js";
-        import pp from "/abi/PyroCore.js";
+        import { ethers } from "./js/ethers-5.2.esm.min.js";
+        import contracts from "./contracts/deployed.js";
+        import abi from "./abi/KindlingCenter.js";
+        import pp from "./abi/PyroCore.js";
 
         const getDeployedContract = (network, contract) => {
             return contracts[network][contract];
