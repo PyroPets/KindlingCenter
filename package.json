@@ -1,0 +1,17 @@
+{
+  "name": "@pyropets/kindlingcenter",
+  "version": "1.0.0",
+  "description": "A contract to bulk play with pyros",
+  "main": "index.js",
+  "scripts": {
+    "build": "npx hardhat compile",
+    "lint": "npx hardhat check"
+  },
+  "author": "SeqSEE",
+  "license": "MIT",
+  "devDependencies": {
+    "@openzeppelin/contracts": "^4.7.0",
+    "@pyropets/pyropets-contracts": "^1.0.0",
+    "hardhat": "^2.10.0"
+  }
+}
