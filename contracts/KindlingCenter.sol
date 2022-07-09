@@ -37,12 +37,12 @@ contract KindlingCenter {
         }
     }
 
-    function playGenerationForAddr(uint256 generation, address owner) public {
-        bool approved = base.isApprovedForAll(owner, address(this));
+    function playGeneration(uint256 generation) public {
+        bool approved = base.isApprovedForAll(msg.sender, address(this));
         require(approved == true, "KindlingCenter: Not approved");
-        uint256 balance = base.balanceOf(owner);
+        uint256 balance = base.balanceOf(msg.sender);
         for (uint256 i = 0; i < balance; i++) {
-            uint256 tokenId = base.tokenOfOwnerByIndex(owner, i);
+            uint256 tokenId = base.tokenOfOwnerByIndex(msg.sender, i);
             uint256 lastPlayed = base.lastPlayed(tokenId);
             if (lastPlayed + 1 days < block.timestamp) {
                 uint256 gen = base.generationOfPyro(tokenId);
@@ -53,12 +53,12 @@ contract KindlingCenter {
         }
     }
 
-    function playGeneration(uint256 generation) public {
-        bool approved = base.isApprovedForAll(msg.sender, address(this));
+    function playGenerationForAddr(uint256 generation, address owner) public {
+        bool approved = base.isApprovedForAll(owner, address(this));
         require(approved == true, "KindlingCenter: Not approved");
-        uint256 balance = base.balanceOf(msg.sender);
+        uint256 balance = base.balanceOf(owner);
         for (uint256 i = 0; i < balance; i++) {
-            uint256 tokenId = base.tokenOfOwnerByIndex(msg.sender, i);
+            uint256 tokenId = base.tokenOfOwnerByIndex(owner, i);
             uint256 lastPlayed = base.lastPlayed(tokenId);
             if (lastPlayed + 1 days < block.timestamp) {
                 uint256 gen = base.generationOfPyro(tokenId);
